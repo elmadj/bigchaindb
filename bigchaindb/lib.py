@@ -1,4 +1,5 @@
-# Copyright BigchainDB GmbH and BigchainDB contributors
+# Copyright © 2020 Interplanetary Database Association e.V.,
+# BigchainDB and IPDB software contributors.
 # SPDX-License-Identifier: (Apache-2.0 AND CC-BY-4.0)
 # Code is Apache-2.0 and docs are CC-BY-4.0
 
@@ -409,6 +410,33 @@ class BigchainDB(object):
         """
         return backend.query.text_search(self.connection, search, limit=limit,
                                          table=table)
+
+    def query(self, json_query, *, limit=0, table='assets'):
+        """Return an iterator of assets that match the json query
+
+        Args:
+            json_query (str): A MongoDB json search query.
+            limit (int, optional): Limit the number of returned documents.
+
+        Returns:
+            iter: An iterator of assets that match the query.
+        """
+        return backend.query.query(self.connection, json_query,
+                                   limit=limit, table=table)
+
+    def aggregate(self, aggregation_functions, *, table='assets'):
+        """Return an iterator of aggregation results.
+
+        Args:
+            aggregation_functions (str): A MongoDB list of aggregation functions
+            in json format.
+            limit (int, optional): Limit the number of returned documents.
+
+        Returns:
+            iter: An iterator of aggregation results.
+        """
+        return backend.query.aggregate(self.connection, aggregation_functions,
+                                       table=table)
 
     def get_assets(self, asset_ids):
         """Return a list of assets that match the asset_ids

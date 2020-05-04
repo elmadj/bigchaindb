@@ -1,10 +1,11 @@
-# Copyright BigchainDB GmbH and BigchainDB contributors
+# Copyright © 2020 Interplanetary Database Association e.V.,
+# BigchainDB and IPDB software contributors.
 # SPDX-License-Identifier: (Apache-2.0 AND CC-BY-4.0)
 # Code is Apache-2.0 and docs are CC-BY-4.0
 
 """Query implementation for MongoDB"""
-
 from pymongo import DESCENDING
+from itertools import islice
 
 from bigchaindb import backend
 from bigchaindb.backend.exceptions import DuplicateKeyError
@@ -134,6 +135,23 @@ def get_txids_filtered(conn, asset_id, operation=None, last_tx=None):
         cursor = cursor.sort([('$natural', DESCENDING)]).limit(1)
 
     return (elem['id'] for elem in cursor)
+
+
+@register_query(LocalMongoDBConnection)
+def query(conn, json_query, *, limit=0, table='assets'):
+    cursor = conn.run(
+        conn.collection(table)
+        .find(json_query).limit(limit))
+
+    return (obj for obj in cursor)
+
+
+@register_query(LocalMongoDBConnection)
+def aggregate(conn, aggregation_functions, *, table='assets'):
+    cursor = conn.run(
+        conn.collection(table)
+        .aggregate(aggregation_functions))
+    return (obj for obj in cursor)
 
 
 @register_query(LocalMongoDBConnection)

@@ -1,4 +1,5 @@
-# Copyright BigchainDB GmbH and BigchainDB contributors
+# Copyright © 2020 Interplanetary Database Association e.V.,
+# BigchainDB and IPDB software contributors.
 # SPDX-License-Identifier: (Apache-2.0 AND CC-BY-4.0)
 # Code is Apache-2.0 and docs are CC-BY-4.0
 
@@ -242,6 +243,48 @@ def text_search(conn, search, *, language='english', case_sensitive=False,
         OperationError: If the backend does not support text search
     """
 
+    raise OperationError('This query is only supported when running '
+                         'BigchainDB with MongoDB as the backend.')
+
+
+@singledispatch
+def query(conn, json_query, *, limit=0, table='assets'):
+    """Return all the assets that match the text search.
+
+    The results are sorted by text score.
+    For more information about the behavior of text search on MongoDB see
+    https://docs.mongodb.com/manual/reference/operator/query/text/#behavior
+
+    Args:
+        json_query (str): A MongoDB json search query.
+        limit (int, optional): Limit the number of returned documents.
+
+    Returns:
+        :obj:`list` of :obj:`dict`: a list of assets
+
+    Raises:
+        OperationError: If the backend does not support json queries.
+    """
+
+    raise OperationError('This query is only supported when running '
+                         'BigchainDB with MongoDB as the backend.')
+
+
+@singledispatch
+def aggregate(conn, aggregation_functions, *, limit=0, table='assets'):
+    """Return an iterator of aggregation results.
+
+    Args:
+        aggregation_functions (str): A MongoDB list of aggregation functions
+        in json format.
+        limit (int, optional): Limit the number of returned documents.
+
+    Returns:
+        iter: An iterator of aggregation results.
+
+    Raises:
+        OperationError: If the backend does not support aggregations.
+    """
     raise OperationError('This query is only supported when running '
                          'BigchainDB with MongoDB as the backend.')
 

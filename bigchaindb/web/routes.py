@@ -1,4 +1,5 @@
-# Copyright BigchainDB GmbH and BigchainDB contributors
+# Copyright © 2020 Interplanetary Database Association e.V.,
+# BigchainDB and IPDB software contributors.
 # SPDX-License-Identifier: (Apache-2.0 AND CC-BY-4.0)
 # Code is Apache-2.0 and docs are CC-BY-4.0
 
@@ -37,6 +38,8 @@ ROUTES_API_V1 = [
     r('transactions/<string:tx_id>', tx.TransactionApi),
     r('transactions', tx.TransactionListApi),
     r('outputs/', outputs.OutputListApi),
+    r('query-assets/', assets.AssetQueryApi),
+    r('aggregate-assets/', assets.AssetAggregateApi),
     r('validators/', validators.ValidatorsApi),
 ]
 
